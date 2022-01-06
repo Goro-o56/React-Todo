@@ -1,4 +1,7 @@
 import { useState } from 'react';
+type Todo = {
+  value: string;
+};
 
 export const App = () => {
     /**
@@ -7,7 +10,9 @@ export const App = () => {
    * useState の引数 = ステートの初期値 (=空の文字列)
    */
 
-    const [text, setText] = useState('');
+  const [text, setText] = useState(''); 
+  const [todos, setTodos] = useState<Todo[]> ([]); /*ステートとして保持しておくtodosはTodo型オブジェクトの配列,useStateに型指定すると型安全*/
+
   return (
     <div>
       <form onSubmit = {(e) => e.preventDefault()}> 
