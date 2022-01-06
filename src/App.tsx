@@ -13,9 +13,41 @@ export const App = () => {
   const [text, setText] = useState(''); 
   const [todos, setTodos] = useState<Todo[]> ([]); /*ステートとして保持しておくtodosはTodo型オブジェクトの配列,useStateに型指定すると型安全*/
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setText(e.target.value);
+  };
+
+  //todos ステートを更新する関数
+  const handleOnSubmit = () => {
+    //何も入力がない
+    if(!text) return;
+    //新しいTodoを作成
+    const newTodo: Todo = {
+      value: text,
+    };
+
+    /** 
+     *スプレッド構文を用いてtodoステートのコピーにnewTodo イミュ―タブルな操作
+     *以下と同義
+     *const oldTodos = todos.slice();
+     *oldTodos.unshift(newTodo);
+     *setTodos(oldTodos);
+     *  
+    **/
+    setTodos([newTodo, ...todos]);
+    //フォームへの入力をクリアする
+    setText('');
+
+  };
+
+
   return (
     <div>
-      <form onSubmit = {(e) => e.preventDefault()}> 
+      <form
+       onSubmit = {(e) => {
+        e.preventDefault();
+        handleOnSubmit();
+       }}> 
         {/*
           入力中テキストの値を text ステートが
           持っているのでそれを value として表示
@@ -26,12 +58,12 @@ export const App = () => {
         <input 
         type = "text" 
         value = {text} 
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => handleOnChange(e)}
         />
         <input
           type = "submit"
           value = "追加"
-          onSubmit = {(e) => e.preventDefault()}
+          onSubmit = {handleOnSubmit}
         />
       </form>
     </div>
